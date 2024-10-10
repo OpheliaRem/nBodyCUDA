@@ -22,8 +22,7 @@ void SetInitialParameters(
 	const std::string path,
 	double& timeStep,
 	double& cuttingRadius,
-	double& limitOfLoop,
-	int& consoleLogFrequency);
+	double& limitOfLoop);
 
 __global__ void calculateForce(Particle* particles, const size_t n)
 {
@@ -75,7 +74,7 @@ int main()
 	double limitOfLoop;
 	int consoleLogFrequency;
 
-	SetInitialParameters("initialParameters.txt", timeStep, cuttingRadius, limitOfLoop, consoleLogFrequency);
+	SetInitialParameters("initialParameters.txt", timeStep, cuttingRadius, limitOfLoop);
 
 	std::cout << "Reading input file\n";
 	Particle* particles = InitializeNBodySystem("Particles.txt", n);
@@ -102,11 +101,9 @@ int main()
 
 	double time = 0.0;
 	long count = 0;
-	bool isConsoleLogSet = consoleLogFrequency > 0;
-	for (;;)
+	while (time < limitOfLoop)
 	{
-		if (isConsoleLogSet && count % consoleLogFrequency == 0)
-			std::cout << count << " iterations have passed. Moment of time: " << time << "\n";
+		std::cout << count << " iterations have passed. Moment of time: " << time << "\n";
 
 		std::ofstream fileCoordinates;
 		std::string countStr = std::to_string(count);
@@ -233,8 +230,7 @@ void SetInitialParameters(
 	const std::string path,
 	double& timeStep,
 	double& cuttingRadius,
-	double& limitOfLoop,
-	int& consoleLogFrequency)
+	double& limitOfLoop)
 	{
 		std::ifstream initialFile;
 		initialFile.open(path);
@@ -250,9 +246,6 @@ void SetInitialParameters(
 
 		initialFile.getline(tempString, 32, '=');
 		initialFile >> limitOfLoop;
-
-		initialFile.getline(tempString, 32, '=');
-		initialFile >> consoleLogFrequency;
 
 		initialFile.close();
 	}
