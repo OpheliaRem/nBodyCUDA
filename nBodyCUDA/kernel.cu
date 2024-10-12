@@ -13,7 +13,8 @@
 /*Solution of N-body problem with Particle-Particle (direct sum) method.
 This program calculates in 3D space,
 with nondimensialization (G = 1),
-equations of motion are solved with Euler's method.*/
+equations of motion are solved with Euler's method.
+Parallel version (NVIDIA CUDA)*/
 
 
 Particle* InitializeNBodySystem(const std::string path, int& n);
@@ -81,7 +82,7 @@ int main()
 		limitOfLoop,
 		outputFrequency);
 
-	std::fstream logFile;
+	std::ofstream logFile;
 	logFile.open("log.txt");
 
 	std::cout << "Reading input file\n";
@@ -148,6 +149,7 @@ int main()
 			fileCoordinates << "x;y;z\n";
 
 			std::cout << "\nWriting to file all positions\n";
+
 			auto startWriting = std::chrono::high_resolution_clock::now();
 			for (int i = 0; i < n; ++i)
 			{
@@ -155,6 +157,7 @@ int main()
 			}
 			auto finishWriting = std::chrono::high_resolution_clock::now();
 			auto msWriting = std::chrono::duration_cast<std::chrono::milliseconds>(finishWriting - startWriting);
+
 			std::cout << "Writing to file has finished in " << msWriting.count() << " milliseconds\n\n";
 			logFile << "Writing to file has finished in " << msWriting.count() << " milliseconds\n\n";
 
@@ -166,7 +169,9 @@ int main()
 		cudaEvent_t start, stop;
 		cudaEventCreate(&start);
 		cudaEventCreate(&stop);
+
 		std::cout << "\nCalculating forces on GPU\n";
+
 		cudaEventRecord(start, 0);
 
 		calculateForce<<<dimGrid, dimBlock>>> (particlesDevice, n);
@@ -181,6 +186,7 @@ int main()
 		cudaEventSynchronize(stop);
 		float elapsedTime;
 		cudaEventElapsedTime(&elapsedTime, start, stop);
+
 		std::cout << "Calculating forces on GPU finished in " << elapsedTime << " milliseconds\n\n";
 		logFile << "Calculating forces on GPU finished in " << elapsedTime << " milliseconds\n\n";
 
@@ -204,6 +210,7 @@ int main()
 		}
 
 		std::cout << "\nCalculating velocities and positions\n";
+
 		auto startEuler = std::chrono::high_resolution_clock::now();
 		for (int i = 0; i < n; ++i)
 		{
@@ -213,6 +220,7 @@ int main()
 		}
 		auto finishEuler = std::chrono::high_resolution_clock::now();
 		auto msEuler = std::chrono::duration_cast<std::chrono::milliseconds>(finishEuler - startEuler);
+
 		std::cout << "Calculating velocities and positions has finished in " << msEuler.count() << " milliseconds\n\n\n";
 		logFile << "Calculating velocities and positions has finished in " << msEuler.count() << " milliseconds\n\n\n";
 
@@ -222,7 +230,6 @@ int main()
 
 	delete[] particles;
 	logFile.close();
-	std::system("pause");
 	return 0;
 }
 
