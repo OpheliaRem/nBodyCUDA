@@ -5,11 +5,10 @@
 #include <string>
 #include <filesystem>
 #include <chrono>
+#include <stdio.h>
 
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
-
-#include <stdio.h>
 
 /*Solution of N-body problem with Particle-Particle (direct sum) method.
 This program calculates in 3D space,
@@ -22,7 +21,8 @@ void SetInitialParameters(
 	const std::string path,
 	double& timeStep,
 	double& cuttingRadius,
-	double& limitOfLoop);
+	double& limitOfLoop,
+	int& outputFrequency);
 
 __global__ void calculateForce(Particle* particles, const size_t n)
 {
@@ -72,13 +72,27 @@ int main()
 	double timeStep;
 	double cuttingRadius;
 	double limitOfLoop;
-	int consoleLogFrequency;
+	int outputFrequency;
 
-	SetInitialParameters("initialParameters.txt", timeStep, cuttingRadius, limitOfLoop);
+	SetInitialParameters(
+		"initialParameters.txt",
+		timeStep,
+		cuttingRadius,
+		limitOfLoop,
+		outputFrequency);
+
+	std::fstream logFile;
+	logFile.open("log.txt");
 
 	std::cout << "Reading input file\n";
+
+	auto startReading = std::chrono::high_resolution_clock::now();
 	Particle* particles = InitializeNBodySystem("Particles.txt", n);
-	std::cout << "File is read\n\n\n";
+	auto finishReading = std::chrono::high_resolution_clock::now();
+	auto msReading = std::chrono::duration_cast<std::chrono::milliseconds>(finishReading - startReading);
+
+	std::cout << "File is read in " << msReading.count() << " milliseconds\n\n\n";
+	logFile << "File is read in " << msReading.count() << " milliseconds\n\n\n";
 
 	Particle* particlesDevice;
 	const size_t sizeBytes = n * sizeof(Particle);
@@ -103,12 +117,13 @@ int main()
 	long count = 0;
 	while (time < limitOfLoop)
 	{
-		std::cout << count << " iterations have passed. Moment of time: " << time << "\n";
+		std::cout << "\n\n============================================================\n";
+		std::cout << count << " iteration\n";
+		std::cout << "============================================================\n";
+		logFile << "\n\n============================================================\n";
+		logFile << count << " iteration\n";
+		logFile << "============================================================\n";
 
-		std::ofstream fileCoordinates;
-		std::string countStr = std::to_string(count);
-		fileCoordinates.open("coordinates\\" + countStr + ".csv");
-		fileCoordinates << "x;y;z\n";
 
 		cudaStatus = cudaMalloc((void**)&particlesDevice, sizeBytes);
 		if (cudaStatus != cudaSuccess)
@@ -124,15 +139,28 @@ int main()
 			return 1;
 		}
 
-		std::cout << "\nWriting to file all positions\n";
-		auto startWriting = std::chrono::high_resolution_clock::now();
-		for (int i = 0; i < n; ++i)
+
+		if (count % outputFrequency == 0)
 		{
-			fileCoordinates << particles[i].position << std::endl;
+			std::ofstream fileCoordinates;
+			std::string countStr = std::to_string(count);
+			fileCoordinates.open("coordinates\\" + countStr + ".csv");
+			fileCoordinates << "x;y;z\n";
+
+			std::cout << "\nWriting to file all positions\n";
+			auto startWriting = std::chrono::high_resolution_clock::now();
+			for (int i = 0; i < n; ++i)
+			{
+				fileCoordinates << particles[i].position << std::endl;
+			}
+			auto finishWriting = std::chrono::high_resolution_clock::now();
+			auto msWriting = std::chrono::duration_cast<std::chrono::milliseconds>(finishWriting - startWriting);
+			std::cout << "Writing to file has finished in " << msWriting.count() << " milliseconds\n\n";
+			logFile << "Writing to file has finished in " << msWriting.count() << " milliseconds\n\n";
+
+			fileCoordinates.close();
 		}
-		auto finishWriting = std::chrono::high_resolution_clock::now();
-		auto msWriting = std::chrono::duration_cast<std::chrono::milliseconds>(finishWriting - startWriting);
-		std::cout << "Writing to file has finished in " << msWriting.count() << " milliseconds\n\n";
+		
 
 
 		cudaEvent_t start, stop;
@@ -154,6 +182,7 @@ int main()
 		float elapsedTime;
 		cudaEventElapsedTime(&elapsedTime, start, stop);
 		std::cout << "Calculating forces on GPU finished in " << elapsedTime << " milliseconds\n\n";
+		logFile << "Calculating forces on GPU finished in " << elapsedTime << " milliseconds\n\n";
 
 		cudaEventDestroy(start);
 		cudaEventDestroy(stop);
@@ -174,7 +203,7 @@ int main()
 			return 1;
 		}
 
-		std::cout << "\nCalculating velocities and positions with Euler's method\n";
+		std::cout << "\nCalculating velocities and positions\n";
 		auto startEuler = std::chrono::high_resolution_clock::now();
 		for (int i = 0; i < n; ++i)
 		{
@@ -184,14 +213,15 @@ int main()
 		}
 		auto finishEuler = std::chrono::high_resolution_clock::now();
 		auto msEuler = std::chrono::duration_cast<std::chrono::milliseconds>(finishEuler - startEuler);
-		std::cout << "Calculating with Euler's method has finished in " << msEuler.count() << " milliseconds\n\n\n\n";
+		std::cout << "Calculating velocities and positions has finished in " << msEuler.count() << " milliseconds\n\n\n";
+		logFile << "Calculating velocities and positions has finished in " << msEuler.count() << " milliseconds\n\n\n";
 
 		time += timeStep;
 		++count;
-		fileCoordinates.close();
 	}
 
 	delete[] particles;
+	logFile.close();
 	std::system("pause");
 	return 0;
 }
@@ -230,22 +260,26 @@ void SetInitialParameters(
 	const std::string path,
 	double& timeStep,
 	double& cuttingRadius,
-	double& limitOfLoop)
-	{
-		std::ifstream initialFile;
-		initialFile.open(path);
+	double& limitOfLoop,
+	int& outputFrequency)
+{
+	std::ifstream initialFile;
+	initialFile.open(path);
 
-		char tempString[32];
-		initialFile.getline(tempString, 32, ';');
+	char tempString[32];
+	initialFile.getline(tempString, 32, ';');
 
-		initialFile.getline(tempString, 32, '=');
-		initialFile >> timeStep;
+	initialFile.getline(tempString, 32, '=');
+	initialFile >> timeStep;
 
-		initialFile.getline(tempString, 32, '=');
-		initialFile >> cuttingRadius;
+	initialFile.getline(tempString, 32, '=');
+	initialFile >> cuttingRadius;
 
-		initialFile.getline(tempString, 32, '=');
-		initialFile >> limitOfLoop;
+	initialFile.getline(tempString, 32, '=');
+	initialFile >> limitOfLoop;
 
-		initialFile.close();
-	}
+	initialFile.getline(tempString, 32, '=');
+	initialFile >> outputFrequency;
+
+	initialFile.close();
+}

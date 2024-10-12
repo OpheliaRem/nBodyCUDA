@@ -2,4 +2,4 @@ format: parameter=value;
 timeStep=0.01;
 cuttingRadius=0.0;
 limitOfLoop=0.02;
-consoleLogFrequency=1;
+outputFrequency=10;
