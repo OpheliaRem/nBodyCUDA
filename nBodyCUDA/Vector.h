@@ -8,7 +8,7 @@ struct Vector
 	double y;
 	double z;
 
-	double Abs() const
+	double abs() const
 	{
 		return sqrt(x * x + y * y + z * z);
 	}
@@ -64,7 +64,7 @@ struct Vector
 		return file;
 	}
 
-	void SetZeroVector()
+	void setZeroVector()
 	{
 		x = 0.0;
 		y = 0.0;

@@ -1,5 +1,7 @@
 format: parameter=value;
 timeStep=0.01;
-cuttingRadius=0.0;
-limitOfLoop=0.02;
-outputFrequency=10;
+limitOfLoop=25.0;
+outputFrequency=5;
+physicalCharacteristicsOutputFrequency=1;
+solvingDEMethod=RungeKutta4;
+calculateWithCUDA=false;

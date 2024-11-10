@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="DTOParameters.h">
+      <Filter>SystemAndParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="AccelerationCalculator.h">
+      <Filter>AccelerationCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="Integrator.h">
+      <Filter>IntegratorDE</Filter>
+    </ClInclude>
+    <ClInclude Include="NBodySystem.h">
+      <Filter>SystemAndParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicalCharacteristic.h">
+      <Filter>PhysicalCharacteristics</Filter>
+    </ClInclude>
+    <ClInclude Include="SolvingDEMethod.h">
+      <Filter>SystemAndParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>ManagingStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>ManagingStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="RungeKutta4Integrator.h">
+      <Filter>IntegratorDE</Filter>
+    </ClInclude>
+    <ClInclude Include="EulerIntegrator.h">
+      <Filter>IntegratorDE</Filter>
+    </ClInclude>
+    <ClInclude Include="SequentialAccelerationCalculator.h">
+      <Filter>AccelerationCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="AccelerationCalculatorCUDA.h">
+      <Filter>AccelerationCalculator</Filter>
+    </ClInclude>
+    <ClInclude Include="Kernel.cuh">
+      <Filter>AccelerationCalculator\CUDAFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Momentum.h">
+      <Filter>PhysicalCharacteristics</Filter>
+    </ClInclude>
+    <ClInclude Include="Energy.h">
+      <Filter>PhysicalCharacteristics</Filter>
+    </ClInclude>
+    <ClInclude Include="ImplicitEulerIntegrator.h">
+      <Filter>IntegratorDE</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AccelerationCalculator">
+      <UniqueIdentifier>{121cb6eb-c82d-4925-bcc9-9b321168c587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IntegratorDE">
+      <UniqueIdentifier>{e9e37890-e93b-4bcf-a16f-fc7431f54c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SystemAndParameters">
+      <UniqueIdentifier>{4b952f95-9405-48fe-a9f3-df07c8e9aaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicalCharacteristics">
+      <UniqueIdentifier>{85e1e06c-0286-47a7-8d77-cd8e27984126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagingStructures">
+      <UniqueIdentifier>{999ab719-5977-411a-a78f-c924ea2bf723}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AccelerationCalculator\CUDAFunctions">
+      <UniqueIdentifier>{6e2a8fd4-6dcd-42b5-a1c2-b88e65345d7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="CUDACalculateAcceleration.cu">
+      <Filter>AccelerationCalculator\CUDAFunctions</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>

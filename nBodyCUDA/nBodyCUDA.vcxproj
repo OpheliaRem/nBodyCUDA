@@ -10,6 +10,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AccelerationCalculator.h" />
+    <ClInclude Include="AccelerationCalculatorCUDA.h" />
+    <ClInclude Include="DTOParameters.h" />
+    <ClInclude Include="Energy.h" />
+    <ClInclude Include="EulerIntegrator.h" />
+    <ClInclude Include="ImplicitEulerIntegrator.h" />
+    <ClInclude Include="Integrator.h" />
+    <ClInclude Include="Kernel.cuh" />
+    <ClInclude Include="Momentum.h" />
+    <ClInclude Include="NBodySystem.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="PhysicalCharacteristic.h" />
+    <ClInclude Include="RungeKutta4Integrator.h" />
+    <ClInclude Include="SequentialAccelerationCalculator.h" />
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SolvingDEMethod.h" />
+    <ClInclude Include="Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="CUDACalculateAcceleration.cu" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49AA2A76-2E89-49BC-ACDD-E264136CF3CC}</ProjectGuid>
     <RootNamespace>nBodyCUDA</RootNamespace>
@@ -81,17 +106,6 @@
       <AdditionalOptions>--std c++20 %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="Vector.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="initialParameters.txt" />
-    <Text Include="Particles.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.6.targets" />

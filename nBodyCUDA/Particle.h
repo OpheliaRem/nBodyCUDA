@@ -5,6 +5,5 @@ struct Particle
 {
 	Vector position;
 	Vector velocity;
-	Vector acceleration;
 	double mass;
 };
