@@ -3,5 +3,5 @@ timeStep=0.01;
 limitOfLoop=25.0;
 outputFrequency=5;
 physicalCharacteristicsOutputFrequency=1;
-solvingDEMethod=RungeKutta4;
+solvingDEMethod=PredictorCorrector;
 calculateWithCUDA=false;

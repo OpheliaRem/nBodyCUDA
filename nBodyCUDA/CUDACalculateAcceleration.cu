@@ -91,9 +91,9 @@ __global__ void calculateForce(Particle* particles, const size_t n, Vector* acce
 				double vector = sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
 				double denominator = vector * vector * vector;
 
-				force.x = force.x + distanceX * particles[i].mass * particles[j].mass / denominator;
-				force.y = force.y + distanceY * particles[i].mass * particles[j].mass / denominator;
-				force.z = force.z + distanceZ * particles[i].mass * particles[j].mass / denominator;
+				force.x = force.x - distanceX * particles[i].mass * particles[j].mass / denominator;
+				force.y = force.y - distanceY * particles[i].mass * particles[j].mass / denominator;
+				force.z = force.z - distanceZ * particles[i].mass * particles[j].mass / denominator;
 			}
 		}
 

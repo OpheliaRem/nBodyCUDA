@@ -1,7 +1,6 @@
 #pragma once
 #include "Integrator.h"
 
-//Now something is wrong with this method, TOFIX errors in near future
 class RungeKutta4Integrator : public Integrator
 {
 public:
@@ -32,35 +31,41 @@ public:
 
 		for (int i = 0; i < n; ++i)
 		{
-			k1[i] = acceleration[i] * parameters.timeStep;
 			l1[i] = particles[i].velocity * parameters.timeStep;
-			temporaryParticles[i].position = particles[i].position + l1[i] * 0.5;
+			k1[i] = acceleration[i] * parameters.timeStep;
+			temporaryParticles[i].position = particles[i].position + l1[i] / 2.0;
+			temporaryParticles[i].velocity = particles[i].velocity + k1[i] / 2.0;
 		}
 
+		delete[] acceleration;
 		acceleration = calculator.calculateAcceleration(temporaryParticles, n);
 
 		for (int i = 0; i < n; ++i)
 		{
+			l2[i] = temporaryParticles[i].velocity * parameters.timeStep;
 			k2[i] = acceleration[i] * parameters.timeStep;
-			l2[i] = (particles[i].velocity + k1[i] * 0.5) * parameters.timeStep;
-			temporaryParticles[i].position = particles[i].position + l2[i] * 0.5;
+			temporaryParticles[i].position = particles[i].position + l2[i] / 2.0;
+			temporaryParticles[i].velocity = particles[i].velocity + k2[i] / 2.0;
 		}
 
+		delete[] acceleration;
 		acceleration = calculator.calculateAcceleration(temporaryParticles, n);
 
 		for (int i = 0; i < n; ++i)
 		{
+			l3[i] = temporaryParticles[i].velocity * parameters.timeStep;
 			k3[i] = acceleration[i] * parameters.timeStep;
-			l3[i] = (particles[i].velocity + k2[i] * 0.5) * parameters.timeStep;
 			temporaryParticles[i].position = particles[i].position + l3[i];
+			temporaryParticles[i].velocity = particles[i].velocity + k3[i];
 		}
 
+		delete[] acceleration;
 		acceleration = calculator.calculateAcceleration(temporaryParticles, n);
 
 		for (int i = 0; i < n; ++i)
 		{
+			l4[i] = temporaryParticles[i].velocity * parameters.timeStep;
 			k4[i] = acceleration[i] * parameters.timeStep;
-			l4[i] = (particles[i].velocity + k3[i]) * parameters.timeStep;
 		}
 
 		for (int i = 0; i < n; ++i)

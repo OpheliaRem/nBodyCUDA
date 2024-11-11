@@ -12,7 +12,7 @@
       <Filter>AccelerationCalculator</Filter>
     </ClInclude>
     <ClInclude Include="Integrator.h">
-      <Filter>IntegratorDE</Filter>
+      <Filter>DEIntegrator</Filter>
     </ClInclude>
     <ClInclude Include="NBodySystem.h">
       <Filter>SystemAndParameters</Filter>
@@ -30,10 +30,10 @@
       <Filter>ManagingStructures</Filter>
     </ClInclude>
     <ClInclude Include="RungeKutta4Integrator.h">
-      <Filter>IntegratorDE</Filter>
+      <Filter>DEIntegrator</Filter>
     </ClInclude>
     <ClInclude Include="EulerIntegrator.h">
-      <Filter>IntegratorDE</Filter>
+      <Filter>DEIntegrator</Filter>
     </ClInclude>
     <ClInclude Include="SequentialAccelerationCalculator.h">
       <Filter>AccelerationCalculator</Filter>
@@ -50,16 +50,34 @@
     <ClInclude Include="Energy.h">
       <Filter>PhysicalCharacteristics</Filter>
     </ClInclude>
-    <ClInclude Include="ImplicitEulerIntegrator.h">
-      <Filter>IntegratorDE</Filter>
+    <ClInclude Include="PredictorCorrectorIntegrator.h">
+      <Filter>DEIntegrator</Filter>
+    </ClInclude>
+    <ClInclude Include="NBodyInitializer.h">
+      <Filter>SystemInitializer</Filter>
+    </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>SystemInitializer\FileReader</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWithInputParametersReader.h">
+      <Filter>SystemInitializer\FileReader</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWithParticlesReader.h">
+      <Filter>SystemInitializer\FileReader</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWriter.h">
+      <Filter>FileWriter</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCoordinatesWriter.h">
+      <Filter>FileWriter</Filter>
+    </ClInclude>
+    <ClInclude Include="RungeKutta2Integrator.h">
+      <Filter>DEIntegrator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AccelerationCalculator">
       <UniqueIdentifier>{121cb6eb-c82d-4925-bcc9-9b321168c587}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IntegratorDE">
-      <UniqueIdentifier>{e9e37890-e93b-4bcf-a16f-fc7431f54c5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="SystemAndParameters">
       <UniqueIdentifier>{4b952f95-9405-48fe-a9f3-df07c8e9aaf5}</UniqueIdentifier>
@@ -72,6 +90,18 @@
     </Filter>
     <Filter Include="AccelerationCalculator\CUDAFunctions">
       <UniqueIdentifier>{6e2a8fd4-6dcd-42b5-a1c2-b88e65345d7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SystemInitializer">
+      <UniqueIdentifier>{964c0173-1ede-41e6-a59e-c1edf52510db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SystemInitializer\FileReader">
+      <UniqueIdentifier>{023edc27-1110-477c-8273-a310f88b81bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileWriter">
+      <UniqueIdentifier>{40b6fbce-8cd1-4877-a7c8-0bd79f6619cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DEIntegrator">
+      <UniqueIdentifier>{e9e37890-e93b-4bcf-a16f-fc7431f54c5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

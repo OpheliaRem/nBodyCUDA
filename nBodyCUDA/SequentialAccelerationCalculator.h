@@ -18,7 +18,7 @@ class SequentialAccelerationCalculator : public AccelerationCalculator
 				if (i != j)
 				{
 					Vector distance = particles[j].position - particles[i].position;
-					Vector toAdd = distance * particles[i].mass * particles[j].mass / SimpleMath::cube(distance.abs());
+					Vector toAdd = -distance * particles[i].mass * particles[j].mass / SimpleMath::cube(distance.abs());
 					force = force + toAdd;
 				}
 			}

@@ -3,6 +3,7 @@
 enum SolvingDEMethod
 {
 	Euler,
-	ImplicitEuler,
+	PredictorCorrector,
+	RungeKutta2,
 	RungeKutta4
 };

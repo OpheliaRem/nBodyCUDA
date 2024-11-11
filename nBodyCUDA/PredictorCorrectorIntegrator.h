@@ -1,7 +1,7 @@
 #pragma once
 #include "Integrator.h"
 
-class ImplicitEulerIntegrator : public Integrator
+class PredictorCorrectorIntegrator : public Integrator
 {
 public:
 	void integrate(
@@ -30,10 +30,12 @@ public:
 
 		for (int i = 0; i < n; ++i)
 		{
-			particles[i].position = particles[i].position + (particles[i].velocity + temporaryParticles[i].velocity) * parameters.timeStep / 2;
-			particles[i].velocity = particles[i].velocity + (acceleration[i] + intermediateAcceleration[i]) * parameters.timeStep / 2;
+			particles[i].position = particles[i].position + (particles[i].velocity + temporaryParticles[i].velocity) * parameters.timeStep / 2.0;
+			particles[i].velocity = particles[i].velocity + (acceleration[i] + intermediateAcceleration[i]) * parameters.timeStep / 2.0;
 		}
 
 		delete[] temporaryParticles;
+		delete[] acceleration;
+		delete[] intermediateAcceleration;
 	}
 };
