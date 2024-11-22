@@ -6,8 +6,7 @@ This program calculates in 3D space,
 with nondimensialization (G = 1).
 */
 
-int main()
-{
+int main() {
 	NBodySystem system;
 
 	system.simulate();

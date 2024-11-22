@@ -15,8 +15,7 @@ public:
 
 		Particle* temporaryParticles = new Particle[n];
 
-		for (int i = 0; i < n; ++i)
-		{
+		for (int i = 0; i < n; ++i) {
 			temporaryParticles[i] = particles[i];
 		}
 

@@ -7,8 +7,8 @@ class Energy : public PhysicalCharacteristic
 	std::ofstream file;
 
 public:
-	Energy(std::string fileName = "Energy.txt") :
-		file{ std::ofstream() }
+	Energy(std::string fileName = "Energy.txt") 
+		: file{ std::ofstream() }
 	{
 		file.open(fileName);
 	}
@@ -31,13 +31,10 @@ public:
 
 		for (int i = 0; i < n; ++i)
 		{
-			for (int j = 0; j < n; ++j)
+			for (int j = i + 1; j < n; ++j)
 			{
-				if (i != j)
-				{
-					Vector distance = particles[j].position - particles[i].position;
-					potentialEnergy += particles[i].mass * particles[j].mass / distance.abs();
-				}
+				Vector distance = particles[j].position - particles[i].position;
+				potentialEnergy += particles[i].mass * particles[j].mass / distance.abs();
 			}
 		}
 

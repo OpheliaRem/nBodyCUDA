@@ -4,8 +4,7 @@
 
 class AccelerationCalculatorCUDA : public AccelerationCalculator
 {
-	Vector* calculateAcceleration(Particle* particles, const int n) const override
-	{
+	Vector* calculateAcceleration(Particle* particles, const int n) const override {
 		return CUDACalculateAcceleration(particles, n);
 	}
 };

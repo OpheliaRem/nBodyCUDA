@@ -1,10 +1,8 @@
 #include "Kernel.cuh"
 
-__host__ Vector* CUDACalculateAcceleration(Particle* particles, const int n)
-{
+__host__ Vector* CUDACalculateAcceleration(Particle* particles, const int n) {
 	cudaError_t cudaStatus = cudaSetDevice(0);
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
 		throw 1;
 	}
@@ -19,37 +17,32 @@ __host__ Vector* CUDACalculateAcceleration(Particle* particles, const int n)
 	dim3 dimGrid(n / 1024 + 1);
 
 	cudaStatus = cudaMalloc((void**)&particlesDevice, sizeParticlesInBytes);
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		throw 1;
 	}
 
 	cudaStatus = cudaMemcpy(particlesDevice, particles, sizeParticlesInBytes, cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMemcpy failed!");
 		throw 1;
 	}
 
 	cudaStatus = cudaMalloc((void**)&accelerationDevice, sizeAccelerationInBytes);
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		throw 1;
 	}
 
 	calculateForce<<<dimGrid, dimBlock>>>(particlesDevice, n, accelerationDevice);
 	cudaStatus = cudaGetLastError();
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
 		throw - 1;
 	}
 
 	cudaStatus = cudaDeviceSynchronize();
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
 		throw 1;
 	}
@@ -57,8 +50,7 @@ __host__ Vector* CUDACalculateAcceleration(Particle* particles, const int n)
 	Vector* acceleration = new Vector[n];
 
 	cudaStatus = cudaMemcpy(acceleration, accelerationDevice, sizeAccelerationInBytes, cudaMemcpyDeviceToHost);
-	if (cudaStatus != cudaSuccess)
-	{
+	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMemcpy failed!");
 		throw 1;
 	}

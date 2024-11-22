@@ -41,8 +41,7 @@ class NBodySystem
 	PhysicalCharacteristic* energy;
 
 
-	void initializeSystemWithLog(std::ofstream& logFile)
-	{
+	void initializeSystemWithLog(std::ofstream& logFile) {
 		std::cout << "Initializing system\n";
 
 		auto start = std::chrono::high_resolution_clock::now();
@@ -56,8 +55,7 @@ class NBodySystem
 		logFile << "System is initialized in " << ms.count() << " milliseconds\n\n\n";
 	}
 
-	void writeToFileWithLog(const long count, std::ofstream& logFile)
-	{
+	void writeToFileWithLog(const long count, std::ofstream& logFile) {
 		if (count % parameters.outputFrequency != 0)
 			return;
 
@@ -80,8 +78,7 @@ class NBodySystem
 		logFile << "Writing to file has finished in " << ms.count() << " milliseconds\n\n";
 	}
 
-	void checkLawsOfConservation(const long count)
-	{
+	void checkLawsOfConservation(const long count) {
 		long limitOfIterations = (long)(parameters.limitOfLoop / parameters.timeStep) + 1L;
 
 		if (
@@ -94,8 +91,7 @@ class NBodySystem
 		energy->checkLawOfConservation(particles, n);
 	}
 
-	void calculateVelocitiesAndPositionsWithLog(std::ofstream& logFile)
-	{
+	void calculateVelocitiesAndPositionsWithLog(std::ofstream& logFile) {
 		std::cout << "\nCalculating velocities and positions\n";
 
 		auto start = std::chrono::high_resolution_clock::now();

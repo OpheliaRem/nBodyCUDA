@@ -24,43 +24,36 @@ class NBodyInitializer
 
 	AccelerationCalculator*& calculator;
 
-	void defineCalculationParameters()
-	{
-		switch (parameters.solvingDEMethod)
-		{
-		case Euler:
-			integrator = new EulerIntegrator();
-			break;
-		case PredictorCorrector:
-			integrator = new PredictorCorrectorIntegrator();
-			break;
-		case RungeKutta2:
-			integrator = new RungeKutta2Integrator();
-			break;
-		case RungeKutta4:
-			integrator = new RungeKutta4Integrator();
-			break;
-		default:
-			throw std::string("Unknown method for solving DEs");
+	void defineCalculationParameters() {
+		switch (parameters.solvingDEMethod) {
+			case Euler:
+				integrator = new EulerIntegrator();
+				break;
+			case PredictorCorrector:
+				integrator = new PredictorCorrectorIntegrator();
+				break;
+			case RungeKutta2:
+				integrator = new RungeKutta2Integrator();
+				break;
+			case RungeKutta4:
+				integrator = new RungeKutta4Integrator();
+				break;
+			default:
+				throw std::string("Unknown method for solving DEs");
 		}
 
 		//calculator = parameters.calculateWithCUDA ? new AccelerationCalculatorCUDA() : new SequentialAccelerationCalculator();
 
-		if (parameters.calculateWithCUDA)
-		{
+		if (parameters.calculateWithCUDA) {
 			calculator = new AccelerationCalculatorCUDA();
-		}
-		else
-		{
+		} else {
 			calculator = new SequentialAccelerationCalculator();
 		}
 	}
 
-	bool createCoordinatesDirectory()
-	{
+	bool createCoordinatesDirectory() {
 		std::filesystem::path path = L"coordinates";
-		if (std::filesystem::exists(path))
-		{
+		if (std::filesystem::exists(path)) {
 			std::filesystem::remove_all(path);
 		}
 
@@ -84,15 +77,13 @@ public:
 		calculator{calculator}
 	{}
 
-	void initialize()
-	{
+	void initialize() {
 		particlesReader->readFile();
 		parametersReader->readFile();
 
 		defineCalculationParameters();
 
-		if (!createCoordinatesDirectory())
-		{
+		if (!createCoordinatesDirectory()) {
 			throw std::string{ "Error making a directory \"coordinates\"\n" };
 		}
 	}
